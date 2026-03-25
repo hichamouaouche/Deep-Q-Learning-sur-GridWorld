@@ -1,5 +1,13 @@
 # Rapport de Devoir - Double DQN sur GridWorld
 
+## Resume executif
+
+Ce devoir implemente un agent **Double DQN** pour resoudre un probleme de navigation dans un **GridWorld 4x4**. L'agent doit atteindre une case objectif en minimisant le nombre d'actions et en evitant un obstacle.
+
+L'experience est menee sur `1000` episodes avec une strategie `epsilon-greedy` et un replay buffer. Les resultats montrent une progression nette des performances : la recompense moyenne passe d'une phase initiale negative a une phase finale stabilisee et positive.
+
+L'analyse quantitative (recompenses, pas/episode, progression par phase) et qualitative (figures et heatmap) confirme que l'agent converge vers une politique efficace.
+
 ## 1. Contexte et objectif
 
 Ce projet présente la mise en oeuvre d'un agent d'apprentissage par renforcement de type **Double DQN (Deep Q-Network)** appliqué a un environnement **GridWorld 4x4**.
@@ -65,6 +73,16 @@ Les hyperparametres utilises dans l'experience sont :
 - Batch size : `32`
 - Taille memoire : `2000`
 - Mise a jour du target network : toutes les `10` episodes
+
+### 4.1 Protocole experimental
+
+- Initialisation aleatoire fixee (`seed = 42`) pour garantir la reproductibilite.
+- Entrainement sur une seule configuration d'environnement (objectif et obstacle fixes).
+- Evaluation de la convergence via :
+    - la moyenne glissante des recompenses,
+    - la moyenne des `50` et `100` derniers episodes,
+    - la reduction du nombre de pas par episode.
+- Les metriques sont enregistrees automatiquement dans `figures/training_summary.txt`.
 
 ## 5. Resultats quantitatifs
 
@@ -149,7 +167,58 @@ Les resultats montrent que l'agent Double DQN apprend une politique stable et pe
 
 Malgre quelques episodes difficiles en debut d'apprentissage (scores tres negatifs), la dynamique globale est conforme au comportement attendu d'un agent en apprentissage par renforcement profond.
 
-## 8. Structure du projet
+### 7.1 Lecture pedagogique des metriques
+
+- Le score final proche de `5.0` est coherent avec la fonction de recompense :
+  - atteindre l'objectif donne `+10`,
+  - un trajet efficace implique quelques penalites `-1`,
+  - ce qui amene une recompense nette autour de `+4` a `+5`.
+- La baisse des pas/episode vers environ `6` indique que la politique apprise se rapproche d'un chemin court vers l'objectif.
+- Les episodes tres negatifs en debut d'entrainement sont normaux : l'agent explore fortement et ne maitrise pas encore la dynamique de l'environnement.
+
+## 8. Hypotheses et limites
+
+- Etat simplifie : representation basee principalement sur la position de l'agent.
+- Environnement statique : obstacle et objectif fixes, sans dynamique temporelle.
+- Une seule taille de grille (`4x4`) testee.
+- Resultats bases sur une seule seed principale (`42`).
+- Pas de comparaison experimentale explicite avec un DQN simple dans ce rendu.
+
+Ces limites n'invalident pas le travail, mais elles encadrent le perimetre scientifique de l'etude.
+
+## 9. Pseudo-code de l'algorithme
+
+```text
+Initialiser GridWorld, online_model, target_model, replay_buffer
+Copier les poids online -> target
+
+Pour episode = 1 a EPISODES:
+    state = reset(env)
+    total_reward = 0
+
+    Pour t = 1 a MAX_STEPS:
+        Avec proba epsilon: action aleatoire
+        Sinon: action = argmax_a Q_online(state, a)
+
+        next_state, reward, done = env.step(action)
+        stocker (state, action, reward, next_state, done) dans replay_buffer
+        state = next_state
+        total_reward += reward
+
+        Si done: sortir de la boucle
+
+    Echantillonner un mini-batch du replay_buffer
+    Pour chaque transition:
+        a* = argmax_a Q_online(next_state, a)
+        target = reward + gamma * Q_target(next_state, a*) si non terminal
+        target = reward sinon
+    Mettre a jour online_model par descente de gradient
+
+    Reduire epsilon
+    Tous les TARGET_UPDATE_EVERY episodes: copier online -> target
+```
+
+## 10. Structure du projet
 
 ```
 Deep Q-Learning sur GridWorld/
@@ -168,7 +237,7 @@ Deep Q-Learning sur GridWorld/
         `-- training_summary.txt
 ```
 
-## 9. Reproduction des experiences
+## 11. Reproduction des experiences
 
 ### 9.1 Installation
 
@@ -188,7 +257,33 @@ Fichiers generes :
 - `figures/*.png`
 - `figures/training_summary.txt`
 
-## 10. Conclusion
+### 11.3 Checklist de reproductibilite
+
+- Verifier que les dependances sont installees via `requirements.txt`.
+- Lancer `python devoir_complet.py` sans erreur.
+- Verifier la presence des fichiers :
+    - `my_model.keras`
+    - `figures/01_training_curve.png`
+    - `figures/02_epsilon_decay.png`
+    - `figures/03_reward_distribution.png`
+    - `figures/04_rewards_by_phase.png`
+    - `figures/05_steps_per_episode.png`
+    - `figures/06_gridworld_visualization.png`
+    - `figures/07_comparison_dashboard.png`
+    - `figures/training_summary.txt`
+- Verifier dans le resume que :
+    - la moyenne des derniers episodes est positive,
+    - epsilon final est proche de `0.01`,
+    - les pas moyens finaux sont inferieurs aux pas initiaux.
+
+## 12. Perspectives
+
+- Comparer Double DQN avec DQN standard sur le meme protocole.
+- Tester plusieurs seeds et rapporter moyenne et ecart-type inter-runs.
+- Augmenter la complexite de l'environnement (grille plus grande, obstacles multiples).
+- Introduire des objectifs variables pour evaluer la robustesse de la politique.
+
+## 13. Conclusion
 
 Ce travail valide l'utilisation de **Double DQN** sur un probleme de navigation discret de type GridWorld. L'agent converge vers une politique efficace, avec des gains nets entre le debut et la fin de l'entrainement.
 
