@@ -1,0 +1,87 @@
+{\rtf1\ansi\deff0
+{\fonttbl{\f0 Calibri;}{\f1 Courier New;}}
+\fs24
+\b RAPPORT DE DEVOIR - DOUBLE DQN\b0\par
+\par
+\b 1. Informations generales\b0\par
+- Module: Apprentissage par renforcement\par
+- Sujet: Implementation et analyse de Double DQN\par
+- Environnement: GridWorld 4x4\par
+- Code principal: devoir_complet.py\par
+\par
+\b 2. Objectif\b0\par
+Ce devoir implemente un agent Double DQN et genere des figures pour analyser l apprentissage.\par
+\par
+\b 3. Theorie resumee\b0\par
+DQN classique utilise le meme reseau pour choisir et evaluer l action, ce qui peut causer une surestimation des Q-values.\par
+Double DQN separe les deux roles:\par
+- Online network: selection de l action\par
+- Target network: evaluation de l action\par
+\par
+Formules:\par
+a* = argmax_a Q_online(s', a)\par
+y = r + gamma * Q_target(s', a*)\par
+\par
+\b 4. Parametres d entrainement\b0\par
+- Episodes: 1000\par
+- Max steps: 50\par
+- Gamma: 0.9\par
+- Learning rate: 0.01\par
+- Epsilon initial: 1.0\par
+- Epsilon min: 0.01\par
+- Epsilon decay: 0.995\par
+- Batch size: 32\par
+- Memory size: 2000\par
+- Target update: tous les 10 episodes\par
+\par
+\b 5. Code Python (extraits)\b0\par
+\f1
+class DoubleDQNAgent:\par
+    def __init__(self):\par
+        self.online_model = self._build_model()\par
+        self.target_model = self._build_model()\par
+        self.update_target_model()\par
+\par
+best_next_action = int(np.argmax(next_q_online[i]))\par
+targets[i, actions[i]] = rewards[i] + GAMMA * next_q_target[i, best_next_action]\par
+\par
+if __name__ == "__main__":\par
+    rewards, epsilons, steps, agent, env = train_double_dqn()\par
+    plot_training_curve(rewards)\par
+\f0
+\par
+Le code complet est dans le fichier devoir_complet.py\par
+\par
+\b 6. Figures produites\b0\par
+Les figures sont dans le dossier figures:\par
+1) 01_training_curve.png\par
+2) 02_epsilon_decay.png\par
+3) 03_reward_distribution.png\par
+4) 04_rewards_by_phase.png\par
+5) 05_steps_per_episode.png\par
+6) 06_gridworld_visualization.png\par
+7) 07_comparison_dashboard.png\par
+\par
+\b 7. Resultats\b0\par
+- Amelioration des recompenses au cours du temps\par
+- Diminution de l exploration (epsilon)\par
+- Stabilisation de la politique finale\par
+\par
+\b 8. Execution\b0\par
+Commande:\par
+python devoir_complet.py\par
+\par
+Sorties:\par
+- my_model.keras\par
+- figures/*.png\par
+- training_summary.txt\par
+\par
+\b 9. Conclusion\b0\par
+Double DQN ameliore la stabilite de l apprentissage en reduisant la surestimation des Q-values.\par
+\par
+\b Fichiers a fournir\b0\par
+- README.md\par
+- rapport_devoir_word.rtf\par
+- devoir_complet.py\par
+- figures/ (7 images)\par
+}

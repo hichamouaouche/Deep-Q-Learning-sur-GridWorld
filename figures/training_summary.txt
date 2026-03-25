@@ -1,0 +1,68 @@
+
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                 RAPPORT D'ENTRAÎNEMENT - DOUBLE DQN                          ║
+║                        GridWorld 4×4 - 1000 Episodes                         ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+📊 CONFIGURATION D'ENTRAÎNEMENT
+───────────────────────────────────────────────────────────────────────────────
+  • Environnement       : GridWorld 4×4
+  • Episodes            : 1000
+  • Max Steps/Episode   : 50
+  • Batch Size          : 32
+  • Memory Size         : 2000
+  • Gamma               : 0.9
+  • Learning Rate       : 0.01
+  • Epsilon Initial     : 1.0
+  • Epsilon Min         : 0.01
+  • Epsilon Decay       : 0.995
+  • Target Update       : Tous les 10 episodes
+
+🎯 RÉSULTATS DE PERFORMANCE
+───────────────────────────────────────────────────────────────────────────────
+  • Récompense Moyenne Totale   :     1.31
+  • Récompense Maximale         :     5.00
+  • Récompense Minimale         :   -74.00
+  • Écart Type                  :    10.08
+  • Récompense Finale           :     5.00
+
+  • Moyenne Derniers 100        :     4.86
+  • Moyenne Derniers 50         :     4.90
+
+🏃 EFFICACITÉ DE L'AGENT
+───────────────────────────────────────────────────────────────────────────────
+  • Pas Moyen par Episode       :     8.73
+  • Pas Maximum                 :    50.00
+  • Pas Minimum                 :     6.00
+  • Pas Derniers Episodes       :     6.10
+
+📈 PROGRESSION PAR PHASE
+───────────────────────────────────────────────────────────────────────────────
+  Phase 1 (Exploration      0-250)  :    -7.88
+  Phase 2 (Apprentissage   250-500) :     3.58
+  Phase 3 (Convergence    500-750)  :     4.69
+  Phase 4 (Stabilisation 750-1000)  :     4.87
+
+  Amélioration P1➜P4                :    12.75 (+161.9%)
+
+🎬 EXPLORATION
+───────────────────────────────────────────────────────────────────────────────
+  • Epsilon Initial             : 1.0000
+  • Epsilon Final               : 0.0100
+  • Réduction                   : 99.00%
+
+✅ FICHIERS GÉNÉRÉS
+───────────────────────────────────────────────────────────────────────────────
+  ✓ 01_training_curve.png                  - Courbe d'entraînement
+  ✓ 02_epsilon_decay.png                   - Décroissance epsilon
+  ✓ 03_reward_distribution.png             - Distribution récompenses
+  ✓ 04_rewards_by_phase.png                - Récompenses par phase
+  ✓ 05_steps_per_episode.png               - Efficacité (pas/episode)
+  ✓ 06_gridworld_visualization.png         - Visualisation GridWorld + Heatmap
+  ✓ 07_comparison_dashboard.png            - Dashboard complet
+  ✓ training_summary.txt                   - Résumé (ce fichier)
+  ✓ my_model.keras                         - Modèle entraîné
+
+═══════════════════════════════════════════════════════════════════════════════
+                        Entraînement Complété avec Succès ✓
+═══════════════════════════════════════════════════════════════════════════════
